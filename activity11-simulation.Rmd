@@ -122,7 +122,15 @@ You should **not** use the default parameter options for these distributions (e.
 Test your function with `n = 30` and `n = 1000`.
 
 ```{r generate n samples}
-
+generate_n_samples<-function(n,mean,sd,r,df,min,max){
+  tibble(
+    norm_values=rnorm(n=n,mean=mean, sd=sd),
+    exp_values = rexp(n=n, r=r),
+    chisq_values=rchisq(n=n,df=df),
+    uniform_values=runif(n=n,min=min,max=max)
+  )
+}
+generate_n_samples(1,5,.05,4,2,1,11)
 ```
 
 
@@ -141,10 +149,10 @@ These are the "population values".
 
 | Distribution | Mean       | SD         |
 |--------------|------------|------------|
-| Normal       |            |            |
-| Exponential  |            |            |
-| Chi-square   |            |            |
-| Uniform      |            |            |
+| Normal       | 5          |   .05      |
+| Exponential  |    .25     |   .25      |r=4
+| Chi-square   |  2         |2           |df=2
+| Uniform      |    6       |  2.88          |min=1,max=11
 
 
 Below I provide you with a function that calculates the sample mean for each column/distribution.
@@ -160,7 +168,10 @@ First, verify that you know what each line of this function is doing.
 Then, use this function in addition to your multiple distribution sample generator from above to calculate the means for `n = 30` and `n = 1000`
 Discuss how the means compares for each distribution.
 Note that it doesn't make sense to compare means/standard deviations across the distributions.
-
+```{r sample_means}
+sample_mean(generate_n_samples(30,5,.05,4,2,1,11))
+sample_mean(generate_n_samples(1000,5,.05,4,2,1,11))
+```
 
 
 
@@ -188,12 +199,18 @@ map(1:1000, ~rnorm(30, mean = 50, sd = 10))
 Continuing to work with your multiple distribution sample generator from above, generate 1,000 samples from the four distributions each with size 30.
 We will want to continue to work with this list so be sure to assign these samples to an appropriately named object (say, `multiple_samples`).
 
+```{r multiple_sample}
+multiple_samples<-rerun(1000,generate_n_samples(30,5,.05,4,2,1,11))
+```
 
 
 Calculate the sample mean of each sample using the appropriate `map` function and my `sample_mean` function to produce a *data frame* of multiple sample means from your multiple samples object.
 Assign these sample means to an appropriately named object.
 
 
+```{r data_frame}
+data.frame(map(1:1000,~sample_mean(generate_n_samples(n=30, param1=1,param2=1))))
+```
 
 
 

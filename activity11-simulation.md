@@ -173,6 +173,23 @@ distributions (e.g., your Normal data should not have a mean of 0 or a
 standard deviation of 1). Test your function with `n = 30` and
 `n = 1000`.
 
+``` r
+generate_n_samples<-function(n,mean,sd,r,df,min,max){
+  tibble(
+    norm_values=rnorm(n=n,mean=mean, sd=sd),
+    exp_values = rexp(n=n, r=r),
+    chisq_values=rchisq(n=n,df=df),
+    uniform_values=runif(n=n,min=min,max=max)
+  )
+}
+generate_n_samples(1,5,.05,4,2,1,11)
+```
+
+    ## # A tibble: 1 x 4
+    ##   norm_values exp_values chisq_values uniform_values
+    ##         <dbl>      <dbl>        <dbl>          <dbl>
+    ## 1        4.97      0.113         1.76           10.6
+
 Keep the following information in mind for the rest of this activity.
 The mean and standard deviation for each of the general distributions we
 are using in this activity are (using the R function arguments):
@@ -193,12 +210,12 @@ are using in this activity are (using the R function arguments):
 Complete the table below with the **mean and standard deviation** values
 for your specific distributions. These are the “population values”.
 
-| Distribution | Mean | SD  |
-|--------------|------|-----|
-| Normal       |      |     |
-| Exponential  |      |     |
-| Chi-square   |      |     |
-| Uniform      |      |     |
+| Distribution | Mean | SD   |
+|--------------|------|------|
+| Normal       | 5    | .05  |
+| Exponential  | .25  | .25  |
+| Chi-square   | 2    | 2    |
+| Uniform      | 6    | 2.88 |
 
 Below I provide you with a function that calculates the sample mean for
 each column/distribution.
@@ -216,6 +233,24 @@ generator from above to calculate the means for `n = 30` and `n = 1000`
 Discuss how the means compares for each distribution. Note that it
 doesn’t make sense to compare means/standard deviations across the
 distributions.
+
+``` r
+sample_mean(generate_n_samples(30,5,.05,4,2,1,11))
+```
+
+    ## # A tibble: 1 x 4
+    ##   mean_norm_values mean_exp_values mean_chisq_values mean_uniform_values
+    ##              <dbl>           <dbl>             <dbl>               <dbl>
+    ## 1             4.98           0.269              2.11                6.28
+
+``` r
+sample_mean(generate_n_samples(1000,5,.05,4,2,1,11))
+```
+
+    ## # A tibble: 1 x 4
+    ##   mean_norm_values mean_exp_values mean_chisq_values mean_uniform_values
+    ##              <dbl>           <dbl>             <dbl>               <dbl>
+    ## 1             5.00           0.259              2.08                6.00
 
 ## Many samples
 
@@ -243,10 +278,20 @@ above, generate 1,000 samples from the four distributions each with size
 these samples to an appropriately named object (say,
 `multiple_samples`).
 
+``` r
+multiple_samples<-rerun(1000,generate_n_samples(30,5,.05,4,2,1,11))
+```
+
 Calculate the sample mean of each sample using the appropriate `map`
 function and my `sample_mean` function to produce a *data frame* of
 multiple sample means from your multiple samples object. Assign these
 sample means to an appropriately named object.
+
+``` r
+data.frame(map(1:1000,~sample_mean(generate_n_samples(n=30, param1=1,param2=1))))
+```
+
+    ## Error in generate_n_samples(n = 30, param1 = 1, param2 = 1): unused arguments (param1 = 1, param2 = 1)
 
 Restructure your previous sample means R object to, instead of having
 1,000 rows and 4 columns, have 4,000 rows and 2 columns where the
@@ -303,10 +348,10 @@ distribution_exploration(n = 100, rep = 1000, mean = 50, sd = 10, rate = 0.2, df
     ## # A tibble: 4 x 3
     ##   distribution      mean    sd
     ##   <chr>            <dbl> <dbl>
-    ## 1 mean_binomial    25.0  0.405
-    ## 2 mean_exponential  4.98 0.403
-    ## 3 mean_normal      50.0  0.832
-    ## 4 mean_uniform     15.0  0.244
+    ## 1 mean_binomial    25.0  0.392
+    ## 2 mean_exponential  5.00 0.419
+    ## 3 mean_normal      50.0  0.792
+    ## 4 mean_uniform     15.0  0.247
 
 How do these values compare to your work with `n = 30`?
 
