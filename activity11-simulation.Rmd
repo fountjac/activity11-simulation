@@ -1,6 +1,6 @@
 ---
 title: "Activity 11 - Simulation"
-author: "Name"
+author: "Jackie Fountain"
 output: github_document
 ---
 
@@ -26,6 +26,9 @@ One way to make sure that you get similar results each time is to always run all
 For this activity, you will need the `{tidyverse}`.
 
 **delete this line and load `{tidyverse}`**
+```{r loading}
+library(tidyverse)
+```
 
 
 ## Exploration
@@ -59,12 +62,25 @@ ggplot(norm_samp_1000, aes(x = values)) +
 
 Using `norm_samp_1000`, obtain the mean and standard deviation of this sample?
 
+```{r norm samp 1000}
+ mean(norm_samp_1000 $ values)
+ sd(norm_samp_1000 $ values)
+```
+
 
 
 Now, create a new simulation.
 In this you will obtain a sample of size 30 from from a Normally distributed variable with a mean 50 and standard deviation 10, and find the mean and standard deviation.
 How do the mean and standard deviation compare to your answers above?
 
+```{r norm_samp_30}
+norm_samp_30 <- tibble(
+  values = rnorm(n = 30, mean = 50, sd = 10)
+)
+ mean(norm_samp_30 $ values)
+ sd(norm_samp_30 $ values)
+ #smaller sample size values are a bit further off from the true mean and sd
+```
 
 
 ### Non-normally distributed population
@@ -74,6 +90,19 @@ Obtain a sample of 1,000 observations and a sample of 30 observations.
 Then, calculate the mean and standard deviation of each sample and discuss how the values are similar and how they differ.
 
 
+```{r exp dists}
+exp_samp_30 <- tibble(
+  values = rexp(n=30, r=.02)
+)
+ mean(exp_samp_30 $ values)
+ sd(exp_samp_30 $ values)
+ 
+exp_samp_1000 <- tibble(
+  values = rexp(n=1000, r=.02)
+)
+ mean(exp_samp_1000 $ values)
+ sd(exp_samp_1000 $ values)
+```
 
 
 ![](README-img/noun_pause.png) **Planned Pause Point**: If you have any questions, contact your instructor. Otherwise feel free to continue on.
@@ -92,6 +121,9 @@ This function should produce a dataset with `n` rows.
 You should **not** use the default parameter options for these distributions (e.g., your Normal data should not have a mean of 0 or a standard deviation of 1).
 Test your function with `n = 30` and `n = 1000`.
 
+```{r generate n samples}
+
+```
 
 
 
